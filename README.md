@@ -1,4 +1,4 @@
-![Array Dot Notation Header Image](https://sajadsdi.github.io/images/array-dot-notation.png)
+![PHP Array Dot Notation](https://sajadsdi.github.io/images/array-dot-notation.png)
 
 
 # Array Dot Notation

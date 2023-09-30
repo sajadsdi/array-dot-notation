@@ -1,0 +1,24 @@
+{
+    "name": "sajadsdi/array-dot-notation",
+    "description": "set and get with dot notation in arrays",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Sajadsdi\\ArrayDotNotation\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "SajaD SaeeDi",
+            "email": "thunder11like@gmail.com",
+            "homepage": "https://github.com/sajadsdi"
+        }
+    ],
+    "require": {
+        "php": "^8.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.0|^9.0|^10.0"
+    }
+}

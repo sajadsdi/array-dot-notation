@@ -1,4 +1,5 @@
 <?php
+
 namespace Sajadsdi\ArrayDotNotation\Traits;
 
 use Sajadsdi\ArrayDotNotation\Exceptions\ArrayKeyNotFoundException;
@@ -19,12 +20,12 @@ trait MultiDotNotationTrait
      *
      * @param array $array The input array.
      * @param array $keys An array of dot-separated keys.
-     *
+     * @param mixed|null $default returned if not null and If the key is not found in the array
      * @return mixed The values found in the array.
      *
      * @throws ArrayKeyNotFoundException If a key is not found in the array.
      */
-    private function getByDotMulti(array $array, array $keys = []): mixed
+    private function getByDotMulti(array $array, array $keys = [], mixed $default = null): mixed
     {
         if ($keys) {
             $result      = [];
@@ -33,13 +34,13 @@ trait MultiDotNotationTrait
             foreach ($keys as $i => $key) {
                 if (is_array($key)) {
                     $j          = is_numeric($i) ? $resultCount : $i;
-                    $result[$j] = $this->getByDotMulti($array, $key);
+                    $result[$j] = $this->getByDotMulti($array, $key, $this->getDefault($default, $resultCount));
                 } else {
-                    $j          = !is_numeric($i) ? $i : $this->getItem($key, $resultCount);
-                    if(isset($result[$j])){
+                    $j = !is_numeric($i) ? $i : $this->getItem($key, $resultCount);
+                    if (isset($result[$j])) {
                         $j .= '_' . $resultCount;
                     }
-                    $result[$j] = $this->getByDot($array, $key);
+                    $result[$j] = $this->getByDot($array, $key, $this->getDefault($default, $resultCount));
                 }
                 if (!$first) {
                     $first = $j;
@@ -78,5 +79,50 @@ trait MultiDotNotationTrait
         $items   = $this->dotToArray($keys);
         $endItem = end($items);
         return !is_numeric($endItem) ? $endItem : $i;
+    }
+
+    /**
+     * @param mixed $default
+     * @param int $i
+     * @return mixed|null
+     */
+    private function getDefault(mixed $default, int $i): mixed
+    {
+        if (is_array($default)) {
+            return $default[$i] ?? null;
+        }
+        return $default;
+    }
+
+    /**
+     * Check if all keys exists in the array using dot notation.
+     *
+     * @param array $keys The key to check for existence.
+     * @return bool True if the key exists, false otherwise.
+     */
+    public function issetAll(array $keys):bool
+    {
+        foreach ($keys as $key){
+            if(!$this->isset($key)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Check if a key of keys exists in the array using dot notation.
+     *
+     * @param array $keys The key to check for existence.
+     * @return bool True if the key exists, false otherwise.
+     */
+    public function issetOne(array $keys):bool
+    {
+        foreach ($keys as $key){
+            if($this->isset($key)){
+                return true;
+            }
+        }
+        return false;
     }
 }

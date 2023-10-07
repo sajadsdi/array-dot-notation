@@ -82,7 +82,7 @@ $settings = [
 // Initialize DotNotation with the $settings array
 $dotNotation = new DotNotation($settings);
 
-$result = $dotNotation->get('app.name', 'app.version', 'user');
+$result = $dotNotation->get(['app.name', 'app.version', 'user']);
 // The result will be ['name' => 'My App', 'version' => '1.0', 'user' => ['theme' => 'light']]
 ```
 
@@ -164,6 +164,144 @@ $result = $dotNotation->get($keys);
 //    [1] => ['id' => 4, 'name' => 'Emily'],
 //    [2] => ['id' => 5, 'name' => 'Sofia']
 // ]
+```
+
+
+#### Example 5: Using `get` with a Single Default Value
+
+In this example, we retrieve the value of the "user.profile.name" key from the data. This key doesn't exist, the default value "Guest" is returned.
+
+```php
+$data = [
+            'app'  => [
+                'name'    => 'My App',
+                'version' => '1.0',
+            ],
+            'user' => [
+                'theme' => 'light',
+            ],
+        ];
+
+// Initialize DotNotation with your data array
+$dotNotation = new DotNotation($data);
+
+// Get the value with a single default value if the key doesn't exist
+$username = $dotNotation->get('user.profile.name', 'Guest');
+
+echo "Username: $username"; // Output: Username: Guest
+```
+
+#### Example 6: Using `get` with a Single Default Value and an Existing Key
+
+In this example, we retrieve the value of the "user.profile.pic" key from the data. Since this key exists in the data, the actual value of the key is returned, and the default value is ignored.
+
+```php
+<?php
+$data = [
+    'user' => [
+        'profile' => [
+            'pic' => '625.png',
+        ],
+    ],
+];
+// Initialize DotNotation with your data array
+$dotNotation = new DotNotation($data);
+
+// Get the value with a single default value if the key exists
+$profilePic = $dotNotation->get('user.profile.pic', 'default_pic.png');
+
+echo "Profile Picture: $profilePic"; // Output: Profile Picture: 625.png (value from the data)
+```
+
+#### Example 7: Using `get` with Multiple Default Values
+
+In this example, we retrieve the values of the "user.profile.name" and "user.profile.bio" keys from the data. If either of these keys doesn't exist, the corresponding default values are returned for each key.
+
+```php
+$data = [
+    'user' => [
+        'profile' => [
+            'name' => 'John Doe',
+        ],
+    ],
+];
+// Initialize DotNotation with your data array
+$dotNotation = new DotNotation($data);
+
+// Get multiple values with a single default value for each key if the key doesn't exist
+$profile = $dotNotation->get(['user.profile.name', 'user.profile.bio'], ['Guest', 'No bio available']);
+
+// Output: ['name' => "John Doe", 'Bio' => "No bio available"]
+```
+
+#### Example 8: Using multiple `get` with one Default Value
+
+In this example, we retrieve the values of the "user.profile.name" and "user.profile.bio" keys from the data. If either of these keys doesn't exist, default value are returned for each key.
+
+```php
+$data = [
+    'user' => [
+        'profile' => [
+            'pic' => '625.png',
+        ],
+    ],
+];
+// Initialize DotNotation with your data array
+$dotNotation = new DotNotation($data);
+
+// Get multiple values with one default value for each key if the key doesn't exist
+$profile = $dotNotation->get(
+    ['user.profile.name', 'user.profile.bio'],'No available'
+);
+
+// Output: ['name' => "No available", 'Bio' => "No available"]
+```
+#### Example 9: Using multiple key in `has` method
+
+In this example, we check for exist the "user.profile.name" and "user.profile.bio" keys in the data. if all keys exists in the data ,true returned.
+```php
+$data = [
+    'user' => [
+        'profile' => [
+            'name' => 'John Doe',
+        ],
+    ],
+];
+// Initialize DotNotation with your data array
+$dotNotation = new DotNotation($data);
+
+// Check if multiple keys exist using an array of keys
+$keysToCheck = ['user.profile.name', 'user.profile.bio'];
+
+if ($dotNotation->has($keysToCheck)) {
+    echo "All keys exist in the data.";
+} else {
+    echo "At least one key does not exist in the data.";
+}
+```
+
+#### Example 10: Using `hasOne` method
+
+if one of all keys exist in the data ,true returned.
+```php
+$data = [
+    'user' => [
+        'profile' => [
+            'name' => 'John Doe',
+        ],
+    ],
+];
+// Initialize DotNotation with your data array
+$dotNotation = new DotNotation($data);
+
+// Check if at least one of the keys exists using an array of keys
+$keysToCheck = ['user.profile.name', 'user.profile.bio'];
+
+if ($dotNotation->hasOne($keysToCheck)) {
+    echo "At least one key exists in the data.";
+} else {
+    echo "None of the keys exist in the data.";
+}
 ```
 
 These examples demonstrate the advanced capabilities of the Array Dot Notation library for handling various scenarios when accessing and manipulating nested arrays using dot notation.

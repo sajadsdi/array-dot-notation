@@ -19,14 +19,14 @@ trait DotNotationTrait
      *
      * @param array $array The input array.
      * @param string $keys The dot-separated keys.
-     *
+     * @param mixed|null $default returned if not null and If the key is not found in the array
      * @return mixed The value found in the array.
      *
      * @throws ArrayKeyNotFoundException If the key is not found in the array.
      */
-    private function getByDot(array $array, string $keys = ''): mixed
+    private function getByDot(array $array, string $keys = '', mixed $default = null): mixed
     {
-        if (!$keys) {
+        if ($keys === '') {
             return $array;
         }
 
@@ -38,7 +38,10 @@ trait DotNotationTrait
                 $result   = $result[$item];
                 $keysPath .= $item;
             } else {
-                return throw new ArrayKeyNotFoundException($item, $keysPath);
+                if($default !== null){
+                    return $default;
+                }
+                throw new ArrayKeyNotFoundException($item, $keysPath);
             }
             $keysPath .= ".";
         }
@@ -78,5 +81,21 @@ trait DotNotationTrait
     private function dotToArray(string $items): array
     {
         return explode('.', $items);
+    }
+
+    /**
+     * Check if a key exists in the array using dot notation.
+     *
+     * @param string|int $key The key to check for existence.
+     * @return bool True if the key exists, false otherwise.
+     */
+    public function isset(string|int $key):bool
+    {
+        try {
+            $this->getByDot($this->array,$key);
+            return true;
+        }catch (ArrayKeyNotFoundException $e){
+            return false;
+        }
     }
 }

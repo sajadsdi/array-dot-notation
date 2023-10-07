@@ -1,8 +1,10 @@
 <?php
+
 namespace Sajadsdi\ArrayDotNotation;
 
 use Sajadsdi\ArrayDotNotation\Exceptions\ArrayKeyNotFoundException;
 use Sajadsdi\ArrayDotNotation\Traits\MultiDotNotationTrait;
+
 /**
  * Class DotNotation
  *
@@ -17,34 +19,21 @@ class DotNotation
     /**
      * @param array $array input array
      */
-    public function __construct(public array $array = []){}
+    public function __construct(public array $array = [])
+    {
+    }
 
     /**
      * Get multiple values from input array using dot notation.
      *
-     * @param mixed ...$keys eg: 'user.profile.id','user.profile.pic'
-     * @return mixed eg: [625 , '652.png']
-     * @throws Exceptions\ArrayKeyNotFoundException
+     * @param mixed $keys eg: ['user.profile.id','user.profile.pic']
+     * @param mixed|null $default returned if not null and If the key is not found in the array
+     * @return mixed eg: ['id' => 625 ,'pic' => '652.png']
+     * @throws ArrayKeyNotFoundException
      */
-    public function get(mixed...$keys): mixed
+    public function get(mixed $keys, mixed $default = null): mixed
     {
-        return $this->getByDotMulti($this->array,$keys);
-    }
-
-    /**
-     * Check if a key exists in the array using dot notation.
-     *
-     * @param string $key The key to check for existence.
-     * @return bool True if the key exists, false otherwise.
-     */
-    public function has(string $key):bool
-    {
-        try {
-            $this->getByDot($this->array,$key);
-            return true;
-        }catch (ArrayKeyNotFoundException $e){
-            return false;
-        }
+        return $this->getByDotMulti($this->array, is_array($keys) ? $keys : [$keys], $default);
     }
 
     /**
@@ -55,7 +44,35 @@ class DotNotation
      */
     public function set(array $KeyValue): static
     {
-        $this->array = $this->setByDotMulti($this->array ,$KeyValue);
+        $this->array = $this->setByDotMulti($this->array, $KeyValue);
         return $this;
+    }
+
+    /**
+     * Check if one or more key(s) exists in the array using dot notation.
+     *
+     * @param mixed $key The key(s) to check for existence.
+     * @return bool True if the key(s) exists, false otherwise.
+     */
+    public function has(mixed $key): bool
+    {
+        if ($key !== null) {
+            if (is_array($key)) {
+                return $this->issetAll($key);
+            }
+            return $this->isset($key);
+        }
+        return false;
+    }
+
+    /**
+     * Check if one key of keys exists in the array using dot notation.
+     *
+     * @param mixed $keys The key(s) to check for existence.
+     * @return bool True if the key(s) exists, false otherwise.
+     */
+    public function hasOne(array $keys): bool
+    {
+        return $this->issetOne($keys);
     }
 }

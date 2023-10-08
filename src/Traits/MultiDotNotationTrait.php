@@ -21,11 +21,12 @@ trait MultiDotNotationTrait
      * @param array $array The input array.
      * @param array $keys An array of dot-separated keys.
      * @param mixed|null $default returned if not null and If the key is not found in the array
+     * @param \Closure|null $callback called for each key used the default value
      * @return mixed The values found in the array.
      *
      * @throws ArrayKeyNotFoundException If a key is not found in the array.
      */
-    private function getByDotMulti(array $array, array $keys = [], mixed $default = null): mixed
+    private function getByDotMulti(array $array, array $keys = [], mixed $default = null, \Closure $callback = null): mixed
     {
         if ($keys) {
             $result      = [];
@@ -34,13 +35,13 @@ trait MultiDotNotationTrait
             foreach ($keys as $i => $key) {
                 if (is_array($key)) {
                     $j          = is_numeric($i) ? $resultCount : $i;
-                    $result[$j] = $this->getByDotMulti($array, $key, $this->getDefault($default, $resultCount));
+                    $result[$j] = $this->getByDotMulti($array, $key, $this->getDefault($default, $resultCount), $callback);
                 } else {
                     $j = !is_numeric($i) ? $i : $this->getItem($key, $resultCount);
                     if (isset($result[$j])) {
                         $j .= '_' . $resultCount;
                     }
-                    $result[$j] = $this->getByDot($array, $key, $this->getDefault($default, $resultCount));
+                    $result[$j] = $this->getByDot($array, $key, $this->getDefault($default, $resultCount), $callback);
                 }
                 if (!$first) {
                     $first = $j;
@@ -58,13 +59,13 @@ trait MultiDotNotationTrait
      *
      * @param array $array The input array.
      * @param array $keyValue An associative array of dot-separated keys and values.
-     *
+     * @param \Closure|null $callback called after set
      * @return array The modified array.
      */
-    private function setByDotMulti(array $array, array $keyValue): array
+    private function setByDotMulti(array $array, array $keyValue, \Closure $callback = null): array
     {
         foreach ($keyValue as $key => $value) {
-            $array = $this->setByDot($array, $key, $value);
+            $array = $this->setByDot($array, $key, $value,$callback);
         }
         return $array;
     }
@@ -100,10 +101,10 @@ trait MultiDotNotationTrait
      * @param array $keys The key to check for existence.
      * @return bool True if the key exists, false otherwise.
      */
-    public function issetAll(array $keys):bool
+    public function issetAll(array $keys): bool
     {
-        foreach ($keys as $key){
-            if(!$this->isset($key)){
+        foreach ($keys as $key) {
+            if (!$this->isset($key)) {
                 return false;
             }
         }
@@ -116,10 +117,10 @@ trait MultiDotNotationTrait
      * @param array $keys The key to check for existence.
      * @return bool True if the key exists, false otherwise.
      */
-    public function issetOne(array $keys):bool
+    public function issetOne(array $keys): bool
     {
-        foreach ($keys as $key){
-            if($this->isset($key)){
+        foreach ($keys as $key) {
+            if ($this->isset($key)) {
                 return true;
             }
         }

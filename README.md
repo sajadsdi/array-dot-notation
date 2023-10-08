@@ -7,8 +7,12 @@ Array Dot Notation is a high-performance and lightweight PHP library that allows
 ## Features
 - Get values from arrays using dot notation keys.
 - Set values in arrays using dot notation keys.
-- Check if a key exists in an array using dot notation.
+- Check if a key or multi keys exists in an array using dot notation.
+- Check if one key from keys is exists in an array...
 - Map keys for output data in get operations.
+- single and multiple default value for `get` function
+- callback for when to return the default value for each key in `get` function
+- callback for when set ech keys in `set` function
 
 ## Installation
 

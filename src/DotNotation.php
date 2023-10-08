@@ -21,6 +21,7 @@ class DotNotation
      */
     public function __construct(public array $array = [])
     {
+
     }
 
     /**
@@ -28,23 +29,25 @@ class DotNotation
      *
      * @param mixed $keys eg: ['user.profile.id','user.profile.pic']
      * @param mixed|null $default returned if not null and If the key is not found in the array
+     * @param \Closure|null $callback called before return default value for each key
      * @return mixed eg: ['id' => 625 ,'pic' => '652.png']
      * @throws ArrayKeyNotFoundException
      */
-    public function get(mixed $keys, mixed $default = null): mixed
+    public function get(mixed $keys, mixed $default = null, \Closure $callback = null): mixed
     {
-        return $this->getByDotMulti($this->array, is_array($keys) ? $keys : [$keys], $default);
+        return $this->getByDotMulti($this->array, is_array($keys) ? $keys : [$keys], $default, $callback);
     }
 
     /**
      * Set multiple values in input array using dot notation.
      *
      * @param array $KeyValue eg: ['user.profile.id' => 625 , 'user.profile.pic' => '625.png']
+     * @param \Closure|null $callback called after set
      * @return $this
      */
-    public function set(array $KeyValue): static
+    public function set(array $KeyValue, \Closure $callback = null): static
     {
-        $this->array = $this->setByDotMulti($this->array, $KeyValue);
+        $this->array = $this->setByDotMulti($this->array, $KeyValue, $callback);
         return $this;
     }
 

@@ -34,7 +34,7 @@ Here's how you can use Array Dot Notation in your PHP project:
 <?php
 require 'vendor/autoload.php';
 
-use sajadsdi\ArrayDotNotation\DotNotation;
+use Sajadsdi\ArrayDotNotation\DotNotation;
 
 // Create an instance of DotNotation with an array
 $data = [

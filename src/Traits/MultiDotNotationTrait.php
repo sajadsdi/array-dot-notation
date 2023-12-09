@@ -2,6 +2,7 @@
 
 namespace Sajadsdi\ArrayDotNotation\Traits;
 
+use Closure;
 use Sajadsdi\ArrayDotNotation\Exceptions\ArrayKeyNotFoundException;
 
 /**
@@ -21,12 +22,13 @@ trait MultiDotNotationTrait
      * @param array $array The input array.
      * @param array $keys An array of dot-separated keys.
      * @param mixed|null $default returned if not null and If the key is not found in the array
-     * @param \Closure|null $callback called for each key used the default value
+     * @param Closure|null $callbackDefault called before set the default value for each key
+     * @param Closure|null $callback called before get value of each key
      * @return mixed The values found in the array.
      *
      * @throws ArrayKeyNotFoundException If a key is not found in the array.
      */
-    private function getByDotMulti(array $array, array $keys = [], mixed $default = null, \Closure $callback = null): mixed
+    public function getByDotMulti(array $array, array $keys = [], mixed $default = null, Closure $callbackDefault = null, Closure $callback = null): mixed
     {
         if ($keys) {
             $result      = [];
@@ -35,13 +37,13 @@ trait MultiDotNotationTrait
             foreach ($keys as $i => $key) {
                 if (is_array($key)) {
                     $j          = is_numeric($i) ? $resultCount : $i;
-                    $result[$j] = $this->getByDotMulti($array, $key, $this->getDefault($default, $resultCount), $callback);
+                    $result[$j] = $this->getByDotMulti($array, $key, $this->getDefault($default, $resultCount), $callbackDefault, $callback);
                 } else {
                     $j = !is_numeric($i) ? $i : $this->getItem($key, $resultCount);
                     if (isset($result[$j])) {
                         $j .= '_' . $resultCount;
                     }
-                    $result[$j] = $this->getByDot($array, $key, $this->getDefault($default, $resultCount), $callback);
+                    $result[$j] = $this->getByDot($array, $key, $this->getDefault($default, $resultCount), $callbackDefault, $callback);
                 }
                 if (!$first) {
                     $first = $j;
@@ -59,13 +61,31 @@ trait MultiDotNotationTrait
      *
      * @param array $array The input array.
      * @param array $keyValue An associative array of dot-separated keys and values.
-     * @param \Closure|null $callback called after set
+     * @param Closure|null $callback called before set
      * @return array The modified array.
      */
-    private function setByDotMulti(array $array, array $keyValue, \Closure $callback = null): array
+    public function setByDotMulti(array $array, array $keyValue, Closure $callback = null): array
     {
         foreach ($keyValue as $key => $value) {
-            $array = $this->setByDot($array, $key, $value,$callback);
+            $array = $this->setByDot($array, $key, $value, $callback);
+        }
+        return $array;
+    }
+
+    /**
+     * Delete multiple keys in an array using dot notation.
+     *
+     * @param array $array The input array.
+     * @param array $keys array of dot-separated keys.
+     * @param bool $throw exception thrown if true for each key not found
+     * @param Closure|null $callback called after delete
+     * @return array The modified array.
+     * @throws ArrayKeyNotFoundException
+     */
+    public function deleteByDotMulti(array $array, array $keys, bool $throw = false, Closure $callback = null): array
+    {
+        foreach ($keys as $key) {
+            $array = $this->deleteByDot($array, $key, $throw, $callback);
         }
         return $array;
     }

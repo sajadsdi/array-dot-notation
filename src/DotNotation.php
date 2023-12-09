@@ -62,7 +62,7 @@ class DotNotation
      * @return $this
      * @throws ArrayKeyNotFoundException
      */
-    public function delete(string|array $keys, bool $throw, Closure $callback = null): static
+    public function delete(string|array $keys, bool $throw = false, Closure $callback = null): static
     {
         $this->array = $this->deleteByDotMulti($this->array, is_string($keys) ? [$keys] : $keys, $throw, $callback);
         return $this;

@@ -4,6 +4,25 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [1.0.4] - 2023-12-09
+
+### Added
+
+- Added delete functions for single and multi traits
+- Added new callback for `get` method
+
+### Changed
+
+- Renamed `callback` param on get method to `callbackDefault`
+- Added `callback` param on get method for called before return.
+- Change after callbacks for get and set to before.
+- refactor
+### Fixed
+
+- No Fixed
+
+
 ## [1.0.3] - 2023-12-07
 
 ### Added

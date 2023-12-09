@@ -2,6 +2,7 @@
 
 namespace Sajadsdi\ArrayDotNotation;
 
+use Closure;
 use Sajadsdi\ArrayDotNotation\Exceptions\ArrayKeyNotFoundException;
 use Sajadsdi\ArrayDotNotation\Traits\MultiDotNotationTrait;
 
@@ -29,25 +30,41 @@ class DotNotation
      *
      * @param mixed $keys eg: ['user.profile.id','user.profile.pic']
      * @param mixed|null $default returned if not null and If the key is not found in the array
-     * @param \Closure|null $callback called before return default value for each key
+     * @param Closure|null $callbackDefault called before return default value for each key
+     * @param Closure|null $callback called before return result value for each key
      * @return mixed eg: ['id' => 625 ,'pic' => '652.png']
      * @throws ArrayKeyNotFoundException
      */
-    public function get(mixed $keys, mixed $default = null, \Closure $callback = null): mixed
+    public function get(string|array $keys, mixed $default = null, Closure $callbackDefault = null, Closure $callback = null): mixed
     {
-        return $this->getByDotMulti($this->array, is_array($keys) ? $keys : [$keys], $default, $callback);
+        return $this->getByDotMulti($this->array, is_string($keys) ? [$keys] : $keys, $default, $callbackDefault, $callback);
     }
 
     /**
      * Set multiple values in input array using dot notation.
      *
      * @param array $KeyValue eg: ['user.profile.id' => 625 , 'user.profile.pic' => '625.png']
-     * @param \Closure|null $callback called after set
+     * @param Closure|null $callback called before set
      * @return $this
      */
-    public function set(array $KeyValue, \Closure $callback = null): static
+    public function set(array $KeyValue, Closure $callback = null): static
     {
         $this->array = $this->setByDotMulti($this->array, $KeyValue, $callback);
+        return $this;
+    }
+
+    /**
+     * delete multiple keys from input array using dot notation.
+     *
+     * @param array|string $keys key(s) to delete
+     * @param bool $throw exception throw for each key is not found!
+     * @param Closure|null $callback called after delete
+     * @return $this
+     * @throws ArrayKeyNotFoundException
+     */
+    public function delete(string|array $keys, bool $throw, Closure $callback = null): static
+    {
+        $this->array = $this->deleteByDotMulti($this->array, is_string($keys) ? [$keys] : $keys, $throw, $callback);
         return $this;
     }
 

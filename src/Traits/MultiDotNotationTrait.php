@@ -30,30 +30,30 @@ trait MultiDotNotationTrait
      */
     public function getByDotMulti(array $array, array $keys = [], mixed $default = null, Closure $callbackDefault = null, Closure $callback = null): mixed
     {
-        if ($keys) {
-            $result      = [];
-            $first       = null;
-            $resultCount = 0;
-            foreach ($keys as $i => $key) {
-                if (is_array($key)) {
-                    $j          = is_numeric($i) ? $resultCount : $i;
-                    $result[$j] = $this->getByDotMulti($array, $key, $this->getDefault($default, $resultCount), $callbackDefault, $callback);
-                } else {
-                    $j = !is_numeric($i) ? $i : $this->getItem($key, $resultCount);
-                    if (isset($result[$j])) {
-                        $j .= '_' . $resultCount;
-                    }
-                    $result[$j] = $this->getByDot($array, $key, $this->getDefault($default, $resultCount), $callbackDefault, $callback);
-                }
-                if (!$first) {
-                    $first = $j;
-                }
-                $resultCount++;
-            }
-            return $resultCount == 1 ? $result[$first] : $result;
-        } else {
+        if (!$keys) {
             return $array;
         }
+
+        $result      = [];
+        $first       = null;
+        $resultCount = 0;
+        foreach ($keys as $i => $key) {
+            if (is_array($key)) {
+                $j          = is_numeric($i) ? $resultCount : $i;
+                $result[$j] = $this->getByDotMulti($array, $key, $this->getDefault($default, $resultCount), $callbackDefault, $callback);
+            } else {
+                $j = !is_numeric($i) ? $i : $this->getItem($key, $resultCount);
+                if (isset($result[$j])) {
+                    $j .= '_' . $resultCount;
+                }
+                $result[$j] = $this->getByDot($array, $key, $this->getDefault($default, $resultCount), $callbackDefault, $callback);
+            }
+            if (!$first) {
+                $first = $j;
+            }
+            $resultCount++;
+        }
+        return $resultCount == 1 ? $result[$first] : $result;
     }
 
     /**

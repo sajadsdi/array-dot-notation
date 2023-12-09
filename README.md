@@ -64,6 +64,34 @@ $dotNotation->set(['user.profile.id' => 12345, 'user.profile.pic' => 'new_pic.pn
 
 // Get the updated value
 $newUserId = $dotNotation->get('user.profile.id'); // $newUserId will be 12345
+
+// Delete key(s) using dot notation
+$dotNotation->delete('user.profile.id');
+
+$user = $dotNotation->get();
+/** The $user will be :
+[
+    'user' => [
+        'profile' => [
+            'pic' => 'new_pic.png'
+        ]
+    ]
+]
+*/
+//set again
+$dotNotation->set(['user.profile.id' => 1234, 'user.profile.pic' => 'new_pic2.png']);
+//multi keys deletion
+$dotNotation->delete(['user.profile.id','user.profile.pic']);
+
+$user = $dotNotation->get();
+/** The $user will be :
+[
+    'user' => [
+        'profile' => []
+    ]
+]
+*/
+
 ```
 
 ### Advanced Usage

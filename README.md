@@ -7,6 +7,7 @@ Array Dot Notation is a high-performance and lightweight PHP library that allows
 ## Features
 - Get values from arrays using dot notation keys.
 - Set values in arrays using dot notation keys.
+- Delete key(s) from array using dot notation.
 - Check if a key or multi keys exists in an array using dot notation.
 - Check if one key from keys is exists in an array...
 - Map keys for output data in get operations.
@@ -64,6 +65,34 @@ $dotNotation->set(['user.profile.id' => 12345, 'user.profile.pic' => 'new_pic.pn
 
 // Get the updated value
 $newUserId = $dotNotation->get('user.profile.id'); // $newUserId will be 12345
+
+// Delete key(s) using dot notation
+$dotNotation->delete('user.profile.id');
+
+$user = $dotNotation->get();
+/** The $user will be :
+[
+    'user' => [
+        'profile' => [
+            'pic' => 'new_pic.png'
+        ]
+    ]
+]
+*/
+//set again
+$dotNotation->set(['user.profile.id' => 1234, 'user.profile.pic' => 'new_pic2.png']);
+//multi keys deletion
+$dotNotation->delete(['user.profile.id','user.profile.pic']);
+
+$user = $dotNotation->get();
+/** The $user will be :
+[
+    'user' => [
+        'profile' => []
+    ]
+]
+*/
+
 ```
 
 ### Advanced Usage

@@ -233,4 +233,40 @@ class DotNotationTest extends TestCase
         ];
         $this->assertEquals($expected, $result);
     }
+
+    public function testDeleteKeys()
+    {
+        $data = [
+            'app'  => [
+                'name'    => 'My New App',
+                'version' => '2.0',
+            ],
+            'user' => [
+                'theme' => 'dark',
+            ],
+        ];
+
+        $dotNotation = new DotNotation($data);
+
+        //delete single key
+        $countOld = count($dotNotation->get('user'));
+
+        $dotNotation->delete('user.theme');
+
+        $count = count($dotNotation->get('user'));
+
+        $this->assertNotEquals($count, $countOld);
+        $this->assertArrayNotHasKey('theme', $dotNotation->get('user'));
+
+        //delete multi keys
+        $appCountOld = count($dotNotation->get('app'));
+
+        $dotNotation->delete(['app.name', 'app.version']);
+
+        $appCount = count($dotNotation->get('app'));
+
+        $this->assertNotEquals($appCount, $appCountOld);
+        $this->assertArrayNotHasKey('name', $dotNotation->get('app'));
+        $this->assertArrayNotHasKey('version', $dotNotation->get('app'));
+    }
 }

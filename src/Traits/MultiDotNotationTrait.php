@@ -64,10 +64,10 @@ trait MultiDotNotationTrait
      * @param Closure|null $callback called before set
      * @return array The modified array.
      */
-    public function setByDotMulti(array $array, array $keyValue, Closure $callback = null): array
+    public function setByDotMulti(array &$array, array $keyValue, Closure $callback = null): array
     {
         foreach ($keyValue as $key => $value) {
-            $array = $this->setByDot($array, $key, $value, $callback);
+            $this->setByDot($array, $key, $value, $callback);
         }
         return $array;
     }
@@ -82,10 +82,10 @@ trait MultiDotNotationTrait
      * @return array The modified array.
      * @throws ArrayKeyNotFoundException
      */
-    public function deleteByDotMulti(array $array, array $keys, bool $throw = false, Closure $callback = null): array
+    public function deleteByDotMulti(array &$array, array $keys, bool $throw = false, Closure $callback = null): array
     {
         foreach ($keys as $key) {
-            $array = $this->deleteByDot($array, $key, $throw, $callback);
+            $this->deleteByDot($array, $key, $throw, $callback);
         }
         return $array;
     }

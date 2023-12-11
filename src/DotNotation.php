@@ -35,9 +35,9 @@ class DotNotation
      * @return mixed eg: ['id' => 625 ,'pic' => '652.png']
      * @throws ArrayKeyNotFoundException
      */
-    public function get(string|array $keys, mixed $default = null, Closure $callbackDefault = null, Closure $callback = null): mixed
+    public function get(string|array $keys = [], mixed $default = null, Closure $callbackDefault = null, Closure $callback = null): mixed
     {
-        return $this->getByDotMulti($this->array, is_string($keys) ? [$keys] : $keys, $default, $callbackDefault, $callback);
+        return $this->getByDotMulti($this->array, is_array($keys) ? $keys : [$keys] , $default, $callbackDefault, $callback);
     }
 
     /**
@@ -49,7 +49,8 @@ class DotNotation
      */
     public function set(array $KeyValue, Closure $callback = null): static
     {
-        $this->array = $this->setByDotMulti($this->array, $KeyValue, $callback);
+        $this->setByDotMulti($this->array, $KeyValue, $callback);
+
         return $this;
     }
 
@@ -64,7 +65,8 @@ class DotNotation
      */
     public function delete(string|array $keys, bool $throw = false, Closure $callback = null): static
     {
-        $this->array = $this->deleteByDotMulti($this->array, is_string($keys) ? [$keys] : $keys, $throw, $callback);
+        $this->deleteByDotMulti($this->array, is_string($keys) ? [$keys] : $keys, $throw, $callback);
+
         return $this;
     }
 
@@ -80,8 +82,10 @@ class DotNotation
             if (is_array($key)) {
                 return $this->issetAll($key);
             }
+
             return $this->isset($key);
         }
+
         return false;
     }
 

@@ -66,16 +66,18 @@ trait DotNotationTrait
      * @param Closure|null $callback called before set
      * @return array The modified array.
      */
-    public function setByDot(array $array, string $keys, mixed $value, Closure $callback = null): array
+    public function setByDot(array &$array, string $keys, mixed $value, Closure $callback = null): array
     {
         $items   = $this->dotToArray($keys);
         $current = &$array;
+
         foreach ($items as $item) {
             if (!is_array($current)) {
                 $current = []; // Remove data if current address is not an array
             }
             $current = &$current[$item];
         }
+
         if ($current !== $value) {
             // callback called before set
             $this->callClosure($callback, $value, $keys);
@@ -96,7 +98,7 @@ trait DotNotationTrait
      * @return array The modified array.
      * @throws ArrayKeyNotFoundException
      */
-    public function deleteByDot(array $array, string $keys, bool $throw = false, Closure $callback = null): array
+    public function deleteByDot(array &$array, string $keys, bool $throw = false, Closure $callback = null): array
     {
         $items   = $this->dotToArray($keys);
         $current = &$array;

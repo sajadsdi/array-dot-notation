@@ -37,6 +37,7 @@ trait MultiDotNotationTrait
         $result      = [];
         $first       = null;
         $resultCount = 0;
+
         foreach ($keys as $i => $key) {
             if (is_array($key)) {
                 $j          = is_numeric($i) ? $resultCount : $i;
@@ -53,6 +54,7 @@ trait MultiDotNotationTrait
             }
             $resultCount++;
         }
+
         return $resultCount == 1 ? $result[$first] : $result;
     }
 
@@ -69,6 +71,7 @@ trait MultiDotNotationTrait
         foreach ($keyValue as $key => $value) {
             $this->setByDot($array, $key, $value, $callback);
         }
+
         return $array;
     }
 
@@ -87,6 +90,7 @@ trait MultiDotNotationTrait
         foreach ($keys as $key) {
             $this->deleteByDot($array, $key, $throw, $callback);
         }
+
         return $array;
     }
 
@@ -112,38 +116,43 @@ trait MultiDotNotationTrait
         if (is_array($default)) {
             return $default[$i] ?? null;
         }
+
         return $default;
     }
 
     /**
      * Check if all keys exists in the array using dot notation.
      *
+     * @param array $array The input array.
      * @param array $keys The key to check for existence.
      * @return bool True if the key exists, false otherwise.
      */
-    public function issetAll(array $keys): bool
+    public function issetAll(array $array, array $keys): bool
     {
         foreach ($keys as $key) {
-            if (!$this->isset($key)) {
+            if (!$this->isset($array, $key)) {
                 return false;
             }
         }
+
         return true;
     }
 
     /**
      * Check if a key of keys exists in the array using dot notation.
      *
+     * @param array $array The input array.
      * @param array $keys The key to check for existence.
      * @return bool True if the key exists, false otherwise.
      */
-    public function issetOne(array $keys): bool
+    public function issetOne(array $array, array $keys): bool
     {
         foreach ($keys as $key) {
-            if ($this->isset($key)) {
+            if ($this->isset($array, $key)) {
                 return true;
             }
         }
+
         return false;
     }
 }

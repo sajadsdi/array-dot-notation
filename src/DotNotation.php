@@ -37,7 +37,7 @@ class DotNotation
      */
     public function get(string|array $keys = [], mixed $default = null, Closure $callbackDefault = null, Closure $callback = null): mixed
     {
-        return $this->getByDotMulti($this->array, is_array($keys) ? $keys : [$keys] , $default, $callbackDefault, $callback);
+        return $this->getByDotMulti($this->array, is_array($keys) ? $keys : [$keys], $default, $callbackDefault, $callback);
     }
 
     /**
@@ -80,10 +80,10 @@ class DotNotation
     {
         if ($key !== null) {
             if (is_array($key)) {
-                return $this->issetAll($key);
+                return $this->issetAll($this->array, $key);
             }
 
-            return $this->isset($key);
+            return $this->isset($this->array, $key);
         }
 
         return false;
@@ -97,6 +97,6 @@ class DotNotation
      */
     public function hasOne(array $keys): bool
     {
-        return $this->issetOne($keys);
+        return $this->issetOne($this->array, $keys);
     }
 }

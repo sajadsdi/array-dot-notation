@@ -36,6 +36,7 @@ trait DotNotationTrait
         $items    = $this->dotToArray($keys);
         $result   = $array;
         $keysPath = '';
+
         foreach ($items as $i => $item) {
             if (isset($result[$item])) {
                 $result   = $result[$item];
@@ -49,6 +50,7 @@ trait DotNotationTrait
                     throw new ArrayKeyNotFoundException($item, $keysPath);
                 }
             }
+
             $keysPath .= ".";
         }
         //before return the $result callback called
@@ -104,6 +106,7 @@ trait DotNotationTrait
         $current = &$array;
         $error   = false;
         $count   = count($items);
+
         foreach ($items as $i => $item) {
             if (!is_array($current) || !isset($current[$item])) {
                 $error = true;// item address not found
@@ -122,6 +125,7 @@ trait DotNotationTrait
             $item     = $items[$count - 1];
             $oldValue = $current[$item];
             unset($current[$item]);
+
             $this->callClosure($callback, $keys, $oldValue);
         }
 
@@ -144,13 +148,14 @@ trait DotNotationTrait
     /**
      * Check if a key exists in the array using dot notation.
      *
+     * @param array $array The input array.
      * @param string|int $key The key to check for existence.
      * @return bool True if the key exists, false otherwise.
      */
-    public function isset(string|int $key): bool
+    public function isset(array $array, string|int $key): bool
     {
         try {
-            $this->getByDot($this->array, $key);
+            $this->getByDot($array, $key);
             return true;
         } catch (ArrayKeyNotFoundException $e) {
             return false;

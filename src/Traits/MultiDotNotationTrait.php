@@ -166,6 +166,6 @@ trait MultiDotNotationTrait
      */
     private function getArrayKeys(int|array|string $keys): array
     {
-        return is_array($keys) ? $keys : (is_string($keys) && $keys ? [$keys] : (is_int($keys) ? [$keys] : []));
+        return is_array($keys) ? $keys : ((is_string($keys) && $keys) || is_int($keys) ? [$keys] : []);
     }
 }

@@ -161,10 +161,10 @@ trait MultiDotNotationTrait
     /**
      * Get standard keys
      *
-     * @param int|array|string $keys
+     * @param mixed $keys
      * @return array
      */
-    private function getArrayKeys(int|array|string $keys): array
+    private function getArrayKeys(mixed $keys): array
     {
         return is_array($keys) ? $keys : ((is_string($keys) && $keys) || is_int($keys) ? [$keys] : []);
     }

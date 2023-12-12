@@ -37,7 +37,7 @@ trait DotNotationTrait
         $result   = $array;
         $keysPath = '';
 
-        foreach ($items as $i => $item) {
+        foreach ($items as $item) {
             if (isset($result[$item])) {
                 $result   = $result[$item];
                 $keysPath .= $item;
@@ -158,7 +158,7 @@ trait DotNotationTrait
         try {
             $this->getByDot($array, $key);
             return true;
-        } catch (ArrayKeyNotFoundException $e) {
+        } catch (ArrayKeyNotFoundException) {
             return false;
         }
     }

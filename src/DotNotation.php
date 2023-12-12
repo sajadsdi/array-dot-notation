@@ -37,7 +37,7 @@ class DotNotation
      */
     public function get(string|array $keys = [], mixed $default = null, Closure $callbackDefault = null, Closure $callback = null): mixed
     {
-        return $this->getByDotMulti($this->array, is_array($keys) ? $keys : [$keys] , $default, $callbackDefault, $callback);
+        return $this->getByDotMulti($this->array, $this->getArrayKeys($keys), $default, $callbackDefault, $callback);
     }
 
     /**
@@ -57,15 +57,15 @@ class DotNotation
     /**
      * delete multiple keys from input array using dot notation.
      *
-     * @param array|string $keys key(s) to delete
+     * @param string|array|int $keys key(s) to delete
      * @param bool $throw exception throw for each key is not found!
      * @param Closure|null $callback called after delete
      * @return $this
      * @throws ArrayKeyNotFoundException
      */
-    public function delete(string|array $keys, bool $throw = false, Closure $callback = null): static
+    public function delete(string|array|int $keys, bool $throw = false, Closure $callback = null): static
     {
-        $this->deleteByDotMulti($this->array, is_string($keys) ? [$keys] : $keys, $throw, $callback);
+        $this->deleteByDotMulti($this->array, $this->getArrayKeys($keys), $throw, $callback);
 
         return $this;
     }
@@ -78,12 +78,10 @@ class DotNotation
      */
     public function has(mixed $key): bool
     {
-        if ($key !== null) {
-            if (is_array($key)) {
-                return $this->issetAll($key);
-            }
+        $aKey = $this->getArrayKeys($key);
 
-            return $this->isset($key);
+        if ($aKey) {
+            return $this->issetAll($this->array, $aKey);
         }
 
         return false;
@@ -97,6 +95,6 @@ class DotNotation
      */
     public function hasOne(array $keys): bool
     {
-        return $this->issetOne($keys);
+        return $this->issetOne($this->array, $keys);
     }
 }

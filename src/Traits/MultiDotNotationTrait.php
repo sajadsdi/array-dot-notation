@@ -83,6 +83,7 @@ trait MultiDotNotationTrait
      * @param bool $throw exception thrown if true for each key not found
      * @param Closure|null $callback called after delete
      * @return array The modified array.
+     *
      * @throws ArrayKeyNotFoundException
      */
     public function deleteByDotMulti(array &$array, array $keys, bool $throw = false, Closure $callback = null): array
@@ -103,6 +104,7 @@ trait MultiDotNotationTrait
     {
         $items   = $this->dotToArray($keys);
         $endItem = end($items);
+
         return !is_numeric($endItem) ? $endItem : $i;
     }
 
@@ -154,5 +156,16 @@ trait MultiDotNotationTrait
         }
 
         return false;
+    }
+
+    /**
+     * Get standard keys
+     *
+     * @param int|array|string $keys
+     * @return array
+     */
+    private function getArrayKeys(int|array|string $keys): array
+    {
+        return is_array($keys) ? $keys : (is_string($keys) && $keys ? [$keys] : (is_int($keys) ? [$keys] : []));
     }
 }

@@ -19,7 +19,7 @@ trait DotNotationTrait
      * Get a value from an array using dot notation.
      *
      * @param array $array The input array.
-     * @param string $keys The dot-separated keys.
+     * @param string $keys The dot-separated key.
      * @param mixed|null $default returned if not null and If the key is not found in the array
      * @param Closure|null $callbackDefault called before set default value
      * @param Closure|null $callback called if keys set and before return result
@@ -63,7 +63,7 @@ trait DotNotationTrait
      * Set a value in an array using dot notation.
      *
      * @param array $array The input array.
-     * @param string $keys The dot-separated keys.
+     * @param string $keys The dot-separated key.
      * @param mixed $value The value to set.
      * @param Closure|null $callback called before set
      * @return array The modified array.
@@ -94,7 +94,7 @@ trait DotNotationTrait
      * delete a key in an array using dot notation.
      *
      * @param array $array The input array.
-     * @param string $keys The dot-separated keys.
+     * @param string $keys The dot-separated key.
      * @param bool $throw exception thrown if true for key not found
      * @param Closure|null $callback called after delete
      * @return array The modified array.
@@ -112,6 +112,7 @@ trait DotNotationTrait
                 $error = true;// item address not found
                 break;
             }
+
             if ($count - 1 != $i) {
                 $current = &$current[$item];
             }
@@ -136,13 +137,13 @@ trait DotNotationTrait
     /**
      * Convert dot notation string to an array of keys.
      *
-     * @param string $items The dot-separated keys.
+     * @param string|int $items The dot-separated keys.
      *
      * @return array An array of keys.
      */
-    private function dotToArray(string $items): array
+    private function dotToArray(string|int $items): array
     {
-        return explode('.', $items);
+        return explode('.', "".$items);
     }
 
     /**
